@@ -11,6 +11,9 @@ import {
 import NearLogo from './assets/logo-white.svg'
 import { login, logout } from './near-utils'
 
+const IMAGE_LINK = 'https://bafybeignggk33ug2lq5zsbpqmjyha2clxqifuag2im3yvaeksimmfxpcjm.ipfs.dweb.link/'
+
+
 type Candidates = Record<string, number>
 
 const api = {
@@ -45,10 +48,14 @@ const Login: React.FC = () => {
       <div className="text-center hero-content">
         <div className="max-w-lg">
           <h1 className="mb-5 text-5xl font-bold">
-            Welcome to Vetal's submission of App 8
+            Welcome to Vetal's submission of App 10
           </h1>
           <p className="mb-5 text-2xl">
-            This is Voting app for Nearvember Challenge 8
+            This is a concept of DCS system for airport 
+            <br />
+            - you can check-in passengers (cannot checkin same PAX)
+            <br />
+            - you can Mint NFT Boarding pass for passengers
             <br />
             You need to sign-in using NEAR Wallet to use this app
           </p>
@@ -82,7 +89,7 @@ const AddCandidate: React.FC<AddCandidateProps> = ({ onClick }) => {
       <div className="relative">
         <input
           type="text"
-          placeholder="Add Candidate"
+          placeholder="Add PAX to check-in"
           className="w-full pr-16 input input-primary input-bordered"
           onChange={(e) => setValue(e.target.value)}
           value={value}
@@ -133,7 +140,7 @@ const Main: React.FC = () => {
   const vote = async (candidate: string) => {
     const res = await api.vote(candidate)
     if (!res) {
-      alert.show(`You already voted for ${candidate}!`)
+      alert.show(`You have already printed boarding pass for ${candidate}!`)
       return
     }
 
@@ -144,7 +151,7 @@ const Main: React.FC = () => {
   const addCandidate = async (candidate: string) => {
     const res = await api.add_candidate(candidate)
     if (!res) {
-      alert.show(`Candidate "${candidate}" already in elections list!`)
+      alert.show(`Passenger "${candidate}" already in boarding list!`)
       return
     }
 
@@ -178,19 +185,35 @@ const Main: React.FC = () => {
           </button>
         </div>
       </div>
+
+
+
       <div className="flex flex-col justify-center items-center">
         <div className="w-full max-w-2xl">
 
-          <h1 className="mb-5 text-5xl font-bold">
-            Choose your candidate:
-          </h1>
+          <img className="nft" src={IMAGE_LINK} />
+
+          <div className="mb-4 w-full">
+            <p className="mb-5 text-2xl">
+
+              Please add Passenger to check-in:
+            </p>
+
+            <AddCandidate onClick={addCandidate} />
+          </div>
+
+
+            <p className="mb-5 text-2xl">
+
+              Checked-in passengers list:
+            </p>
 
           <table className="table w-full">
             <thead>
               <tr>
-                <th className="text-center">Rank</th>
-                <th className="text-center">Candidate</th>
-                <th className="text-center">Votes</th>
+                <th className="text-center">Seq</th>
+                <th className="text-center">PAX</th>
+                <th className="text-center">Seat</th>
                 <th className="w-48"></th>
               </tr>
             </thead>
@@ -202,7 +225,7 @@ const Main: React.FC = () => {
                   <td className="text-center">{x.votes}</td>
                   <td className="flex justify-center w-48">
                     <LoadingButton onClick={() => vote(x.name)}>
-                      submit your vote
+                      MINT NFT Boarding Pass
                     </LoadingButton>
                   </td>
                 </tr>
@@ -210,16 +233,10 @@ const Main: React.FC = () => {
             </tbody>
           </table>
 
-          <div className="mb-4 w-full">
-          <br />
-          <br />
-            <p className="mb-5 text-2xl">
-              OR...
-              <br />
-              You can add your own candidate using the form below.
-            </p>
 
-            <AddCandidate onClick={addCandidate} />
+          <div className="after">
+            <br />
+            <p>Please find your NFT boarding pass in your <a target="_blank" rel="noreferrer" href="https://wallet.testnet.near.org/?tab=collectibles"><b>wallet</b></a></p>
           </div>
 
         </div>
